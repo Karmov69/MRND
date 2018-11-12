@@ -1,0 +1,18 @@
+.Bag {
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
+  flex-grow: 1;
+  width: 100%;
+  background: linear-gradient(270deg, #f0613c 0%, #f0783c 100%);
+}
+
+.Bag textarea {
+  width: 300px;
+  height: 100px;
+  border: none;
+}
+
+.Bag button {
+  width: 100%;
+}

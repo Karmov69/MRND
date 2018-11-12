@@ -1,0 +1,44 @@
+.RandomFilm {
+  display: flex;
+  padding-bottom: 50px;
+  justify-content: center;
+  padding-top: 100px;
+  flex-grow: 1;
+  width: 100%;
+  background: linear-gradient(279deg, #cef2fa 0%, #59bfef 100%);
+}
+
+.RandomFilm > div {
+  width: 100%;
+  max-width: 600px;
+  padding: 0 20px;
+}
+
+.RandomFilm > div ul {
+  list-style: none;
+  padding: 0;
+}
+
+.RandomFilm > div ul li {
+  padding: 5px 0;
+}
+
+.RandomFilm > div button {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 4px;
+  border: none;
+  background: linear-gradient(270deg, #f0613c 0%, #f0783c 100%);
+  color: #000;
+  margin-right: 15px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .RandomFilm {
+    padding-top: 70px;
+  }
+}
