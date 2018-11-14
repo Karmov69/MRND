@@ -12,11 +12,30 @@ class AddFilm extends Component {
     authorExist: false,
     message: "",
     myViewed: [],
-    visibleViewedList: false
+    seanceList: [],
+    visibleViewedList: false,
+    visibleThisSeance: false,
+    seanceCount: 0
   };
 
   componentDidMount = async () => {
     let currentUser = localStorage.getItem("login");
+    await axios
+      .get("https://react-quiz-4129b.firebaseio.com/films.json")
+      .then(response => {
+        let seanceList = [];
+
+        for (const i in response.data) {
+          if (response.data.hasOwnProperty(i)) {
+            seanceList.push(response.data[i]);
+          }
+        }
+        this.setState({ seanceList });
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    this.setState({ seanceCount: this.state.seanceList[0].films.length });
     await axios
       .get("https://react-quiz-4129b.firebaseio.com/all-films.json")
       .then(response => {
@@ -47,34 +66,56 @@ class AddFilm extends Component {
   };
 
   addViewedFilm = name => {
-    if (name) {
-      this.state.films.push({
-        filmName: name,
-        exist: false,
-        id: this.state.currentFilmNumber
+    if (this.state.currentFilmNumber < this.state.maxFilm && name) {
+      let existFilms = this.state.films.filter(film => {
+        return film.filmName === name;
       });
-
-      let countFilm = this.state.currentFilmNumber;
-      this.setState({ currentFilmNumber: countFilm + 1 });
-      this.setState({
-        inputFilmName: ""
-      });
+      if (existFilms.length === 0) {
+        this.state.films.push({
+          filmName: name,
+          exist: false,
+          id: this.state.currentFilmNumber
+        });
+        let countFilm = this.state.currentFilmNumber;
+        this.setState({ currentFilmNumber: countFilm + 1 });
+        this.setState({
+          inputFilmName: ""
+        });
+        this.setState({ message: "" });
+      } else {
+        this.setState({ message: "Вы уже добавили данный фильм!" });
+      }
     }
   };
+
+
   addFilmHandler = () => {
     if (this.state.currentFilmNumber < this.state.maxFilm) {
-      this.state.films.push({
-        filmName: this.state.inputFilmName,
-        exist: false,
-        id: this.state.currentFilmNumber
-      });
+      let existFilms = this.state.films.filter(film => {
+        return film.filmName === this.state.inputFilmName
+      })
+      
+      if (existFilms.length ===0) {
+        this.state.films.push({
+          filmName: this.state.inputFilmName,
+          exist: false,
+          id: this.state.currentFilmNumber
+        });
+        let countFilm = this.state.currentFilmNumber;
+        this.setState({ currentFilmNumber: countFilm + 1 });
+        this.setState({
+          inputFilmName: ""
+        });
+        this.setState({
+          message: ""
+        })
+      } else {
+        this.setState({
+          message: "Вы уже добавили данный фильм!"
+        })
+      }
     }
-
-    let countFilm = this.state.currentFilmNumber;
-    this.setState({ currentFilmNumber: countFilm + 1 });
-    this.setState({
-      inputFilmName: ""
-    });
+    
   };
 
   filmList = () => {
@@ -258,6 +299,35 @@ class AddFilm extends Component {
     this.setState({ visibleViewedList: !this.state.visibleViewedList });
   };
 
+  showThisSeanceHandler = () => {
+    this.setState({ visibleThisSeance: !this.state.visibleThisSeance });
+  };
+
+  getThisSeance = () => {  
+    
+
+    
+    if (this.state.seanceList.length !== 0) {
+      let resultArr = [];
+      for (const iterator of this.state.seanceList) {
+        for (const key in iterator.films) {
+          if (iterator.films.hasOwnProperty(key)) {
+            const element = iterator.films[key];
+            resultArr.push(element.filmName);
+          }
+        }
+      }
+
+      return resultArr.map((film, index) => {
+        return <li key={index}>{film}</li>;
+      });
+    }
+  };
+
+  getCountSeance = () => {
+    return this.state.seanceCount;
+  }
+
   render() {
     return (
       <div className={classes.AddFilm}>
@@ -302,6 +372,22 @@ class AddFilm extends Component {
                 {this.state.visibleViewedList ? (
                   <ul className={classes.viewed}>{this.getMyViewed()}</ul>
                 ) : null}
+
+                <div
+                  className={classes.thisSeance}
+                  onClick={this.showThisSeanceHandler}
+                >
+                  <h2 onClick={this.showThisSeanceHandler}>Текущий сеанс ({this.state.seanceCount})</h2>
+                  {this.state.visibleThisSeance ? (
+                    <i className="fa fa-chevron-up" aria-hidden="true" />
+                  ) : (
+                    <i className="fa fa-chevron-down" aria-hidden="true" />
+                  )}
+                </div>
+                {this.state.visibleThisSeance ? (
+                  <ul className={classes.viewed}>{this.getThisSeance()}</ul>
+                ) : null}
+                
               </div>
             ) : null}
           </form>
