@@ -16,8 +16,6 @@ class App extends Component {
   componentDidMount() {
     this.props.autoLogin();
   }
-  //<Route path="/quiz-creator" component={QuizCreator} />
-  //<Route path="/quiz/:id" component={Quiz} />
   render() {
     let routes = (
       <Switch>
@@ -34,7 +32,7 @@ class App extends Component {
           <Route path="/add-film" component={AddFilm} />
           <Route path="/random-film" component={RandomFilm} />
           <Route path="/viewed" component={Viewed} />
-          <Route path="/" exact component={RandomFilm} />
+          <Route path="/" exact component={AddFilm} />
           <Route path="/bag" exact component={Bag} />
           <Redirect to="/" />
         </Switch>

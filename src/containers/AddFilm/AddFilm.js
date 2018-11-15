@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import classes from "./AddFilm.css";
 import axios from "../../axios/axios-quiz";
+import Loader from "../../components/UI/Loader/Loader";
 
 class AddFilm extends Component {
   state = {
@@ -15,10 +16,12 @@ class AddFilm extends Component {
     seanceList: [],
     visibleViewedList: false,
     visibleThisSeance: false,
-    seanceCount: 0
+    seanceCount: 0,
+    pending: false
   };
 
   componentDidMount = async () => {
+    this.setState({ pending: true });
     let currentUser = localStorage.getItem("login");
     await axios
       .get("https://react-quiz-4129b.firebaseio.com/films.json")
@@ -55,6 +58,9 @@ class AddFilm extends Component {
           }
         }
         this.setState({ myViewed });
+        this.setState({
+          pending: false
+        });
       })
       .catch(e => {
         console.log(e);
@@ -88,14 +94,13 @@ class AddFilm extends Component {
     }
   };
 
-
   addFilmHandler = () => {
     if (this.state.currentFilmNumber < this.state.maxFilm) {
       let existFilms = this.state.films.filter(film => {
-        return film.filmName === this.state.inputFilmName
-      })
-      
-      if (existFilms.length ===0) {
+        return film.filmName === this.state.inputFilmName;
+      });
+
+      if (existFilms.length === 0) {
         this.state.films.push({
           filmName: this.state.inputFilmName,
           exist: false,
@@ -108,14 +113,13 @@ class AddFilm extends Component {
         });
         this.setState({
           message: ""
-        })
+        });
       } else {
         this.setState({
           message: "Вы уже добавили данный фильм!"
-        })
+        });
       }
     }
-    
   };
 
   filmList = () => {
@@ -288,7 +292,7 @@ class AddFilm extends Component {
       return resultArr.map((film, index) => {
         return (
           <li key={index} onClick={this.addViewedFilm.bind(this, film)}>
-            {film}
+            {film} <i className="fas fa-plus" />
           </li>
         );
       });
@@ -303,10 +307,7 @@ class AddFilm extends Component {
     this.setState({ visibleThisSeance: !this.state.visibleThisSeance });
   };
 
-  getThisSeance = () => {  
-    
-
-    
+  getThisSeance = () => {
     if (this.state.seanceList.length !== 0) {
       let resultArr = [];
       for (const iterator of this.state.seanceList) {
@@ -326,72 +327,83 @@ class AddFilm extends Component {
 
   getCountSeance = () => {
     return this.state.seanceCount;
-  }
+  };
 
   render() {
     return (
       <div className={classes.AddFilm}>
-        <div>
-          <h1>Добавить фильм</h1>
-          <p>{this.state.message}</p>
-          <form>
-            {this.state.currentFilmNumber < this.state.maxFilm ? (
-              <div>
-                <input
-                  type="text"
-                  value={this.state.inputFilmName}
-                  onChange={this.handleChange}
-                />
-                <button type="button" onClick={this.addFilmHandler}>
-                  Добавить
+        {!this.state.pending ? (
+          <div>
+            <h1>Добавить фильм</h1>
+            <p>{this.state.message}</p>
+            <form>
+              {this.state.currentFilmNumber < this.state.maxFilm ? (
+                <div>
+                  <input
+                    type="text"
+                    value={this.state.inputFilmName}
+                    onChange={this.handleChange}
+                  />
+                  <button type="button" onClick={this.addFilmHandler}>
+                    Добавить
+                  </button>
+                </div>
+              ) : null}
+
+              <ul className={classes.currentFilms}>{this.filmList()}</ul>
+              {this.state.currentFilmNumber === this.state.maxFilm ? (
+                <button
+                  type="button"
+                  onClick={this.sendFilms}
+                  className={classes.send}
+                >
+                  Отправить
                 </button>
-              </div>
-            ) : null}
+              ) : null}
 
-            <ul className={classes.currentFilms}>{this.filmList()}</ul>
-            {this.state.currentFilmNumber === this.state.maxFilm ? (
-              <button type="button" onClick={this.sendFilms}>
-                Отправить
-              </button>
-            ) : null}
+              {this.state.myViewed.length !== 0 ? (
+                <div>
+                  <div
+                    className={classes.viewedTitle}
+                    onClick={this.showViewedHandler}
+                  >
+                    <h2 onClick={this.showViewedHandler}>
+                      Раннее добавленные{" "}
+                    </h2>
 
-            {this.state.myViewed.length !== 0 ? (
-              <div>
-                <div
-                  className={classes.viewedTitle}
-                  onClick={this.showViewedHandler}
-                >
-                  <h2 onClick={this.showViewedHandler}>Раннее добавленное </h2>
-
+                    {this.state.visibleViewedList ? (
+                      <i className="fa fa-chevron-up" aria-hidden="true" />
+                    ) : (
+                      <i className="fa fa-chevron-down" aria-hidden="true" />
+                    )}
+                  </div>
                   {this.state.visibleViewedList ? (
-                    <i className="fa fa-chevron-up" aria-hidden="true" />
-                  ) : (
-                    <i className="fa fa-chevron-down" aria-hidden="true" />
-                  )}
-                </div>
-                {this.state.visibleViewedList ? (
-                  <ul className={classes.viewed}>{this.getMyViewed()}</ul>
-                ) : null}
+                    <ul className={classes.viewed}>{this.getMyViewed()}</ul>
+                  ) : null}
 
-                <div
-                  className={classes.thisSeance}
-                  onClick={this.showThisSeanceHandler}
-                >
-                  <h2 onClick={this.showThisSeanceHandler}>Текущий сеанс ({this.state.seanceCount})</h2>
+                  <div
+                    className={classes.thisSeance}
+                    onClick={this.showThisSeanceHandler}
+                  >
+                    <h2 onClick={this.showThisSeanceHandler}>
+                      Текущий сеанс ( {this.state.seanceCount} )
+                    </h2>
+                    {this.state.visibleThisSeance ? (
+                      <i className="fa fa-chevron-up" aria-hidden="true" />
+                    ) : (
+                      <i className="fa fa-chevron-down" aria-hidden="true" />
+                    )}
+                  </div>
                   {this.state.visibleThisSeance ? (
-                    <i className="fa fa-chevron-up" aria-hidden="true" />
-                  ) : (
-                    <i className="fa fa-chevron-down" aria-hidden="true" />
-                  )}
+                    <ul className={classes.viewed}>{this.getThisSeance()}</ul>
+                  ) : null}
                 </div>
-                {this.state.visibleThisSeance ? (
-                  <ul className={classes.viewed}>{this.getThisSeance()}</ul>
-                ) : null}
-                
-              </div>
-            ) : null}
-          </form>
-        </div>
+              ) : null}
+            </form>
+          </div>
+        ) : (
+          <Loader />
+        )}
       </div>
     );
   }

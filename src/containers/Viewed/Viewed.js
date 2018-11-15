@@ -1,13 +1,18 @@
-import React, { Component} from 'react';
-import classes from './Viewed.css'
+import React, { Component } from "react";
+import classes from "./Viewed.css";
 import axios from "axios";
+import Loader from "../../components/UI/Loader/Loader";
 
 class Viewed extends Component {
   state = {
-    films: []
+    films: [],
+    pending: false
   };
 
   componentDidMount = async () => {
+    this.setState({
+      pending: true
+    });
     await axios
       .get("https://react-quiz-4129b.firebaseio.com/viewed.json")
       .then(response => {
@@ -23,6 +28,9 @@ class Viewed extends Component {
       .catch(e => {
         console.log(e);
       });
+    this.setState({
+      pending: false
+    });
   };
 
   getViewed = () => {
@@ -36,17 +44,22 @@ class Viewed extends Component {
         return <li key={index}>{film}</li>;
       });
     }
-  }
+  };
 
   render() {
-    return <div className={classes.Viewed}>
-        <div>
-          <h1>Просмотренные</h1>
-          <ul>{this.getViewed()}</ul>
-        </div>
-      </div>;
+    return (
+      <div className={classes.Viewed}>
+        {!this.state.pending ? (
+          <div>
+            <h1>Просмотренные</h1>
+            <ul>{this.getViewed()}</ul>
+          </div>
+        ) : (
+          <Loader />
+        )}
+      </div>
+    );
   }
 }
-
 
 export default Viewed;

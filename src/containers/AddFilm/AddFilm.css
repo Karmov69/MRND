@@ -1,6 +1,4 @@
 .AddFilm {
-  display: flex;
-  justify-content: center;
   padding-top: 100px;
   flex-grow: 1;
   width: 100%;
@@ -8,9 +6,9 @@
 }
 
 .AddFilm > div {
-  width: 100%;
   max-width: 600px;
   padding: 0 20px;
+  margin: 0 auto;
 }
 
 .AddFilm form div button {
@@ -34,6 +32,8 @@
   cursor: pointer;
   margin-bottom: 10px;
   background: linear-gradient(90deg, #fd8355 0%, #f0576c 37%, #f79cbd 100%);
+  display: flex;
+  justify-content: space-between;
 }
 
 .viewed li:hover {
@@ -84,6 +84,7 @@ button {
   display: flex;
   align-items: center;
   cursor: pointer;
+  justify-content: space-between;
 }
 .viewedTitle h2 {
   margin-right: 20px;
@@ -93,17 +94,15 @@ button {
   font-size: 20px;
 }
 
-@media (max-width: 480px) {
-  .AddFilm {
-    padding-top: 70px;
-  }
+.send {
+  background-color: limegreen;
 }
-
 
 .thisSeance {
   display: flex;
   align-items: center;
   cursor: pointer;
+  justify-content: space-between;
 }
 .thisSeance h2 {
   margin-right: 20px;
@@ -111,4 +110,13 @@ button {
 .thisSeance i {
   height: 10px;
   font-size: 20px;
+}
+
+@media (max-width: 480px) {
+  .AddFilm {
+    padding-top: 70px;
+  }
+  .send {
+    width: 100%;
+  }
 }

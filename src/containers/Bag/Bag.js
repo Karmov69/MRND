@@ -1,15 +1,20 @@
 import React, { Component } from "react";
 import classes from "./Bag.css";
 import axios from "../../axios/axios-quiz";
+import Loader from "../../components/UI/Loader/Loader";
 
 class Bag extends Component {
   state = {
     user: localStorage.getItem("login"),
     comment: "",
-    comments: []
+    comments: [],
+    pending: false
   };
 
   componentDidMount = async () => {
+    this.setState({
+      pending: true
+    });
     await axios
       .get("https://react-quiz-4129b.firebaseio.com/comments.json")
       .then(response => {
@@ -27,6 +32,9 @@ class Bag extends Component {
         }
 
         this.setState({ comments });
+        this.setState({
+          pending: false
+        });
       })
       .catch(e => {
         console.log(e);
@@ -105,14 +113,18 @@ class Bag extends Component {
   render() {
     return (
       <div className={classes.Bag}>
-        <div>
-          <h1>Отзывы</h1>
-          {this.getCommentsHandler()}
-          <textarea value={this.state.comment} onChange={this.handleChange} />
-          <button type="submit" onClick={this.sendCommentHandler}>
-            Отправить
-          </button>
-        </div>
+        {!this.state.pending ? (
+          <div>
+            <h1>Отзывы</h1>
+            {this.getCommentsHandler()}
+            <textarea value={this.state.comment} onChange={this.handleChange} />
+            <button type="submit" onClick={this.sendCommentHandler}>
+              Отправить
+            </button>
+          </div>
+        ) : (
+          <Loader />
+        )}
       </div>
     );
   }
