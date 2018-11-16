@@ -27,13 +27,16 @@ class Drawer extends Component {
 
   render() {
     const cls = [classes.Drawer];
+    let user = localStorage.getItem("login");
 
     if (!this.props.isOpen) {
       cls.push(classes.close);
     }
 
     const links = [];
-
+    if (user === "Karmov@gmail.com") {
+      links.push({ to: "/admin", label: "Админка", exact: false });
+    }
     if (this.props.isAuthenticated) {
       links.push({
         to: "/add-film",
@@ -50,6 +53,7 @@ class Drawer extends Component {
         label: "Просмотренные",
         exact: false
       });
+
       links.push({ to: "/bag", label: "Баги", exact: false });
       links.push({
         to: "/logout",

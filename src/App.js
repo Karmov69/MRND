@@ -10,6 +10,7 @@ import Viewed from "./containers/Viewed/Viewed";
 import { connect } from "react-redux";
 import Logout from "./components/Logout/Logout";
 import Bag from "./containers/Bag/Bag";
+import Admin from "./containers/Admin/Admin";
 import { autoLogin } from "./store/actions/auth";
 
 class App extends Component {
@@ -34,10 +35,12 @@ class App extends Component {
           <Route path="/viewed" component={Viewed} />
           <Route path="/" exact component={AddFilm} />
           <Route path="/bag" exact component={Bag} />
+          <Route path="/admin" exact component={Admin} />
           <Redirect to="/" />
         </Switch>
       );
     }
+
     return <Layout>{routes}</Layout>;
   }
 }

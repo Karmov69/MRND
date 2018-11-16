@@ -38,7 +38,11 @@ class AddFilm extends Component {
       .catch(e => {
         console.log(e);
       });
-    this.setState({ seanceCount: this.state.seanceList[0].films.length });
+
+    if (this.state.seanceList.length !== 0) {
+      this.setState({ seanceCount: this.state.seanceList[0].films.length });
+    }
+
     await axios
       .get("https://react-quiz-4129b.firebaseio.com/all-films.json")
       .then(response => {
@@ -186,7 +190,7 @@ class AddFilm extends Component {
     });
     if (!this.state.authorExist) {
       await axios
-        .get("https://react-quiz-4129b.firebaseio.com/all-films.json")
+        .get("https://react-quiz-4129b.firebaseio.com/viewed.json")
         .then(response => {
           if (response.data) {
             let allFilms = response.data;
@@ -197,34 +201,26 @@ class AddFilm extends Component {
                 let filmState = iterator.filmName;
                 for (const i in allFilms) {
                   if (allFilms.hasOwnProperty(i)) {
-                    const elements = allFilms[i];
-                    for (const j in elements.films) {
-                      if (elements.films.hasOwnProperty(j)) {
-                        const film = elements.films[j].filmName;
-                        if (filmState === film) {
-                          let films = this.state.films;
-                          let itemId = iterator.id;
-                          for (const key in films) {
-                            if (films.hasOwnProperty(key)) {
-                              const element = films[key];
-                              if (element.id === itemId) {
-                                element.exist = true;
-                                this.setState({
-                                  message:
-                                    "Данные фильмы уже есть в списке, добавьте другой!"
-                                });
-                              }
-                            }
+                    const film = allFilms[i].film;
+                    if (filmState === film) {
+                      let films = this.state.films;
+                      let itemId = iterator.id;
+                      for (const key in films) {
+                        if (films.hasOwnProperty(key)) {
+                          const element = films[key];
+                          if (element.id === itemId) {
+                            element.exist = true;
+                            this.setState({
+                              message: "Данные фильмы уже были просмотрены!"
+                            });
                           }
-                          this.setState({ films, exist: true });
-                        } else {
                         }
                       }
+                      this.setState({ films, exist: true });
                     }
                   }
                 }
               }
-            } else {
             }
           } else {
             axios.post("https://react-quiz-4129b.firebaseio.com/films.json", {

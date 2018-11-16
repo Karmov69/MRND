@@ -1,0 +1,12 @@
+.Admin {
+  padding-top: 100px;
+  flex-grow: 1;
+  width: 100%;
+  background: linear-gradient(279deg, #cef2fa 0%, #59bfef 100%);
+}
+
+.Admin > div {
+  max-width: 600px;
+  padding: 0 20px;
+  margin: 0 auto;
+}

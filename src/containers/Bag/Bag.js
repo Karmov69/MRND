@@ -97,7 +97,6 @@ class Bag extends Component {
       }
 
       return resultArr.map((comment, index) => {
-        console.log(comment);
         return (
           <div key={index}>
             <h3>
