@@ -24,7 +24,6 @@ class Admin extends Component {
         }
         this.setState({ seanceList });
         this.setState({ pending: false });
-        console.log(this.state.seanceList);
       })
       .catch(e => {
         console.log(e);

@@ -12,12 +12,14 @@ class AddFilm extends Component {
     exist: false,
     authorExist: false,
     message: "",
-    myViewed: [],
+    myAddedList: [],
     seanceList: [],
     visibleViewedList: false,
     visibleThisSeance: false,
     seanceCount: 0,
-    pending: false
+    pending: false,
+    existAllFilms: false,
+    viewedList: []
   };
 
   componentDidMount = async () => {
@@ -46,25 +48,42 @@ class AddFilm extends Component {
     await axios
       .get("https://react-quiz-4129b.firebaseio.com/all-films.json")
       .then(response => {
-        let myViewed = [];
+        let myAddedList = [];
 
         for (const key in response.data) {
           if (response.data.hasOwnProperty(key)) {
             const element = response.data[key];
-
             if (element.author === currentUser) {
               for (const i in element.films) {
                 if (element.films.hasOwnProperty(i)) {
-                  myViewed.push(element.films[i].filmName);
+                  myAddedList.push(element.films[i].filmName);
                 }
               }
             }
           }
         }
-        this.setState({ myViewed });
+
+        this.setState({ myAddedList });
         this.setState({
           pending: false
         });
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    await axios
+      .get("https://react-quiz-4129b.firebaseio.com/viewed.json")
+      .then(response => {
+        let data = response.data;
+        let viewedList = [];
+
+        for (const key in data) {
+          if (data.hasOwnProperty(key)) {
+            const film = data[key].film;
+            viewedList.push(film);
+          }
+        }
+        this.setState({ viewedList });
       })
       .catch(e => {
         console.log(e);
@@ -75,7 +94,7 @@ class AddFilm extends Component {
     this.setState({ inputFilmName: event.target.value });
   };
 
-  addViewedFilm = name => {
+  addMyAddedList = name => {
     if (this.state.currentFilmNumber < this.state.maxFilm && name) {
       let existFilms = this.state.films.filter(film => {
         return film.filmName === name;
@@ -190,38 +209,37 @@ class AddFilm extends Component {
     });
     if (!this.state.authorExist) {
       await axios
-        .get("https://react-quiz-4129b.firebaseio.com/viewed.json")
+        .get("https://react-quiz-4129b.firebaseio.com/all-films.json")
         .then(response => {
           if (response.data) {
-            let allFilms = response.data;
+            // console.log("viewedList", this.state.viewedList);
+            // console.log("myAddedList", this.state.myAddedList);
+            // console.log("films", this.state.films);
 
-            if (this.state.films) {
-              let filmsState = this.state.films;
-              for (const iterator of filmsState) {
-                let filmState = iterator.filmName;
-                for (const i in allFilms) {
-                  if (allFilms.hasOwnProperty(i)) {
-                    const film = allFilms[i].film;
-                    if (filmState === film) {
-                      let films = this.state.films;
-                      let itemId = iterator.id;
-                      for (const key in films) {
-                        if (films.hasOwnProperty(key)) {
-                          const element = films[key];
-                          if (element.id === itemId) {
-                            element.exist = true;
-                            this.setState({
-                              message: "Данные фильмы уже были просмотрены!"
-                            });
-                          }
-                        }
-                      }
-                      this.setState({ films, exist: true });
-                    }
-                  }
+            for (const film of this.state.films) {
+              let filmState = film.filmName;
+              for (const filmViewed of this.state.viewedList) {
+                if (filmState === filmViewed) {
+                  film.exist = true;
+                  this.setState({
+                    exist: true
+                  });
                 }
               }
             }
+
+            for (const film of this.state.films) {
+              let filmState = film.filmName;
+              for (const filmAdded of this.state.myAddedList) {
+                if (filmState === filmAdded) {
+                  this.setState({
+                    existAllFilms: true
+                  });
+                }
+              }
+            }
+
+            // console.log("films", this.state.films);
           } else {
             axios.post("https://react-quiz-4129b.firebaseio.com/films.json", {
               films: this.state.films,
@@ -247,7 +265,7 @@ class AddFilm extends Component {
       await axios
         .get("https://react-quiz-4129b.firebaseio.com/all-films.json")
         .then(response => {
-          if (!this.state.exist && response.data) {
+          if (!this.state.exist && response.data && !this.state.existAllFilms) {
             axios.post("https://react-quiz-4129b.firebaseio.com/films.json", {
               films: this.state.films,
               author: localStorage.getItem("login")
@@ -259,6 +277,18 @@ class AddFilm extends Component {
                 author: localStorage.getItem("login")
               }
             );
+            this.setState({
+              inputFilmName: "",
+              films: [],
+              maxFilm: 3,
+              currentFilmNumber: 0
+            });
+          }
+          if (!this.state.exist && response.data) {
+            axios.post("https://react-quiz-4129b.firebaseio.com/films.json", {
+              films: this.state.films,
+              author: localStorage.getItem("login")
+            });
             this.setState({
               inputFilmName: "",
               films: [],
@@ -278,16 +308,16 @@ class AddFilm extends Component {
     // -----------
   };
 
-  getMyViewed = () => {
-    if (this.state.myViewed.length !== 0) {
+  getMyAdded = () => {
+    if (this.state.myAddedList.length !== 0) {
       let resultArr = [];
-      for (const iterator of this.state.myViewed) {
+      for (const iterator of this.state.myAddedList) {
         resultArr.push(iterator);
       }
 
       return resultArr.map((film, index) => {
         return (
-          <li key={index} onClick={this.addViewedFilm.bind(this, film)}>
+          <li key={index} onClick={this.addMyAddedList.bind(this, film)}>
             {film} <i className="fas fa-plus" />
           </li>
         );
@@ -357,7 +387,7 @@ class AddFilm extends Component {
                 </button>
               ) : null}
 
-              {this.state.myViewed.length !== 0 ? (
+              {this.state.myAddedList.length !== 0 ? (
                 <div>
                   <div
                     className={classes.viewedTitle}
@@ -374,7 +404,7 @@ class AddFilm extends Component {
                     )}
                   </div>
                   {this.state.visibleViewedList ? (
-                    <ul className={classes.viewed}>{this.getMyViewed()}</ul>
+                    <ul className={classes.viewed}>{this.getMyAdded()}</ul>
                   ) : null}
 
                   <div
