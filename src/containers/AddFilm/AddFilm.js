@@ -227,7 +227,7 @@ class AddFilm extends Component {
                 }
               }
             }
-
+            let filmsForAllFilms = [];
             for (const film of this.state.films) {
               let filmState = film.filmName;
               for (const filmAdded of this.state.myAddedList) {
@@ -235,10 +235,16 @@ class AddFilm extends Component {
                   this.setState({
                     existAllFilms: true
                   });
+                } else {
+                  filmsForAllFilms.push({
+                    filmName: filmState,
+                    exist: true
+                  });
                 }
               }
             }
-
+        console.log(filmsForAllFilms);
+        
             // console.log("films", this.state.films);
           } else {
             axios.post("https://react-quiz-4129b.firebaseio.com/films.json", {
@@ -284,7 +290,7 @@ class AddFilm extends Component {
               currentFilmNumber: 0
             });
           }
-          if (!this.state.exist && response.data) {
+          if (!this.state.exist && response.data && this.state.existAllFilms) {
             axios.post("https://react-quiz-4129b.firebaseio.com/films.json", {
               films: this.state.films,
               author: localStorage.getItem("login")
