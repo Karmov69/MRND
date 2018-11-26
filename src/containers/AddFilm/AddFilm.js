@@ -243,9 +243,6 @@ class AddFilm extends Component {
                 }
               }
             }
-        console.log(filmsForAllFilms);
-        
-            // console.log("films", this.state.films);
           } else {
             axios.post("https://react-quiz-4129b.firebaseio.com/films.json", {
               films: this.state.films,
@@ -295,6 +292,13 @@ class AddFilm extends Component {
               films: this.state.films,
               author: localStorage.getItem("login")
             });
+            axios.post(
+              "https://react-quiz-4129b.firebaseio.com/all-films.json",
+              {
+                films: this.state.films,
+                author: localStorage.getItem("login")
+              }
+            );
             this.setState({
               inputFilmName: "",
               films: [],
@@ -321,6 +325,11 @@ class AddFilm extends Component {
         resultArr.push(iterator);
       }
 
+      resultArr = resultArr.filter(function(item) {
+        return resultArr.hasOwnProperty(item)
+          ? false
+          : (resultArr[item] = true);
+      });
       return resultArr.map((film, index) => {
         return (
           <li key={index} onClick={this.addMyAddedList.bind(this, film)}>

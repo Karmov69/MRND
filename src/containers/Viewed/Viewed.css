@@ -43,6 +43,10 @@
   background: #59bfef;
 }
 
+.fa-star {
+  cursor: pointer;
+}
+
 @media (max-width: 480px) {
   .Viewed {
     padding-top: 70px;
