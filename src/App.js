@@ -33,7 +33,7 @@ class App extends Component {
           <Route path="/add-film" component={AddFilm} />
           <Route path="/random-film" component={RandomFilm} />
           <Route path="/viewed" component={Viewed} />
-          <Route path="/" exact component={AddFilm} />
+          <Route path="/" exact component={Viewed} />
           <Route path="/bag" exact component={Bag} />
           <Route path="/admin" exact component={Admin} />
           <Redirect to="/" />

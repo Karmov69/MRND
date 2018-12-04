@@ -53,7 +53,7 @@ class Viewed extends Component {
       }
     }
     this.setState({ films });
-    axios.post("https://react-quiz-4129b.firebaseio.com/viewed.json", films);
+    //axios.post("https://react-quiz-4129b.firebaseio.com/viewed.json", films);
   }
 
   getViewed = () => {
