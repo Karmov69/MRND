@@ -3,6 +3,7 @@ import classes from "./Viewed.css";
 import axios from "axios";
 import Loader from "../../components/UI/Loader/Loader";
 import Rating from "../../components/UI/Rating/Rating";
+import * as firebase from "firebase";
 class Viewed extends Component {
   state = {
     films: [],
@@ -13,11 +14,11 @@ class Viewed extends Component {
     this.setState({
       pending: true
     });
+
     await axios
       .get("https://react-quiz-4129b.firebaseio.com/viewed.json")
       .then(response => {
         let films = [];
-
         for (const i in response.data) {
           if (response.data.hasOwnProperty(i)) {
             films.push({
@@ -28,7 +29,9 @@ class Viewed extends Component {
           }
         }
         this.setState({ films });
+        console.log(this.state.films);
       })
+
       .catch(e => {
         console.log(e);
       });
@@ -42,18 +45,46 @@ class Viewed extends Component {
     let thisFilm = films.filter(film => {
       return film.film === name;
     });
-    console.log(films);
+    console.log("TEST", thisFilm[0]);
+    thisFilm[0].test = [];
+    console.log("TEST", thisFilm[0]);
+
+    let thisFilmRatingCount = 0;
+    let thisFilmRatingSumm = 0;
+    if (!thisFilm[0].rating) {
+      thisFilm[0].rating = [];
+    }
+    if (!thisFilm[0].avg) {
+      thisFilm[0].avg = 0;
+    }
+
+    thisFilmRatingCount = thisFilm[0].rating.length;
+
+    for (let i = 0; i < thisFilmRatingCount; i++) {
+      const point = thisFilm[0].rating[i];
+      thisFilmRatingSumm += point;
+    }
 
     for (const key in films) {
       if (films.hasOwnProperty(key)) {
         const element = films[key];
         if (element.film === thisFilm[0].film) {
           element.rating.push(index);
+          if (thisFilmRatingCount === 0) {
+            element.avg = index;
+          } else {
+            element.avg = thisFilmRatingSumm / thisFilmRatingCount;
+          }
         }
       }
     }
     this.setState({ films });
-    //axios.post("https://react-quiz-4129b.firebaseio.com/viewed.json", films);
+    console.log(this.state.films);
+
+    firebase
+      .database()
+      .ref()
+      .update({ viewed: films });
   }
 
   getViewed = () => {

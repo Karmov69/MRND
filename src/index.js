@@ -2,12 +2,23 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
+
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter } from "react-router-dom";
 import { createStore, compose, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import rootReducer from "./store/reducers/rootReducer";
 import thunk from "redux-thunk";
+import * as firebase from "firebase";
+
+const config = {
+  apiKey: "AIzaSyC5kTG3pKKqKhyWP6PiVFsJXqjoXyesYJY",
+  authDomain: "react-quiz-4129b.firebaseapp.com",
+  databaseURL: "https://react-quiz-4129b.firebaseio.com",
+  storageBucket: "react-quiz-4129b.appspot.com"
+};
+
+firebase.initializeApp(config);
 
 const composeEnhancers =
   typeof window === "object" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__

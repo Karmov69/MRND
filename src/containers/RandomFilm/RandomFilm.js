@@ -108,7 +108,9 @@ class RandomFilm extends Component {
 
   addViewed = async film => {
     await axios.post("https://react-quiz-4129b.firebaseio.com/viewed.json", {
-      film
+      film: film,
+      rating: [],
+      avg: 0
     });
     await axios
       .delete("https://react-quiz-4129b.firebaseio.com/films.json")
