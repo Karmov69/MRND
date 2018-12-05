@@ -29,7 +29,6 @@ class Viewed extends Component {
           }
         }
         this.setState({ films });
-        console.log(this.state.films);
       })
 
       .catch(e => {
@@ -45,9 +44,7 @@ class Viewed extends Component {
     let thisFilm = films.filter(film => {
       return film.film === name;
     });
-    console.log("TEST", thisFilm[0]);
     thisFilm[0].test = [];
-    console.log("TEST", thisFilm[0]);
 
     let thisFilmRatingCount = 0;
     let thisFilmRatingSumm = 0;
@@ -79,7 +76,6 @@ class Viewed extends Component {
       }
     }
     this.setState({ films });
-    console.log(this.state.films);
 
     firebase
       .database()
