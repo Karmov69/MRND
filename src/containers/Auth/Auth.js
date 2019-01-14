@@ -122,7 +122,6 @@ class Auth extends Component {
             <Button
               type="success"
               onClick={this.loginHandler}
-              // disabled={!this.state.isFormValide}
             >
               Войти
             </Button>
@@ -130,7 +129,6 @@ class Auth extends Component {
             <Button
               type="primary"
               onClick={this.registerHandler}
-              // disabled={!this.state.isFormValide}
             >
               Регистрация
             </Button>
