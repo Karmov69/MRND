@@ -15,4 +15,4 @@ deploy:
   skip_cleanup: true
   provider: firebase
   token:
-    secure: [TOKEN OBMITTED - BUT CAN BE IN REPO]
+    secure: [https://react-quiz-4129b.firebaseio.com/]
