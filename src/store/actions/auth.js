@@ -8,34 +8,29 @@ export function auth(email, password, isLogin) {
       password,
       returnSecureToken: true
     };
+
     localStorage.setItem("login", authData.email);
-    
-    let url =
-      "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyC5kTG3pKKqKhyWP6PiVFsJXqjoXyesYJY";
+
+    let url = `${process.env.REACT_APP_AUTH_URL}`;
     let user = {};
+
     if (isLogin) {
       url =
-        "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyC5kTG3pKKqKhyWP6PiVFsJXqjoXyesYJY";
+        `${process.env.REACT_APP_REGISTER_URL}`;
       localStorage.setItem('login', authData.email);
-      console.log("from auth 1", authData.email);
-      
-    }else {
-      console.log("from auth 2", authData.email);
+    } else {
       user.login = authData.email;
       localStorage.setItem('login', authData.email);
     }
 
     const response = await axios.post(url, authData);
-    
-    
+    console.log(response);
+
     if (user) {
-      await axios.post("https://react-quiz-4129b.firebaseio.com/users.json", user);
-      
+      await axios.post(`${process.env.REACT_APP_FIRWBASE_URL}/users.json`, user);
     }
-    
 
     const data = response.data;
-
     const expirationDate = new Date(
       new Date().getTime() + data.expiresIn * 1000
     );

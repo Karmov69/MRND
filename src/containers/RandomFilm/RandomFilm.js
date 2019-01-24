@@ -19,7 +19,7 @@ class RandomFilm extends Component {
       pending: true
     });
     await axios
-      .get("https://react-quiz-4129b.firebaseio.com/films.json")
+      .get(`${process.env.REACT_APP_FIRWBASE_URL}/films.json`)
       .then(response => {
         let films = [];
 
@@ -34,7 +34,7 @@ class RandomFilm extends Component {
         console.log(e);
       });
     await axios
-      .get("https://react-quiz-4129b.firebaseio.com/users.json")
+      .get(`${process.env.REACT_APP_FIRWBASE_URL}/users.json`)
       .then(response => {
         let users = [];
         let data = response.data;
@@ -107,15 +107,15 @@ class RandomFilm extends Component {
   };
 
   addViewed = async film => {
-    await axios.post("https://react-quiz-4129b.firebaseio.com/viewed.json", {
+    await axios.post(`${process.env.REACT_APP_FIRWBASE_URL}/viewed.json`, {
       film: film,
       rating: [],
       avg: 0
     });
     await axios
-      .delete("https://react-quiz-4129b.firebaseio.com/films.json")
-      .then(response => {})
-      .catch(e => {});
+      .delete(`${process.env.REACT_APP_FIRWBASE_URL}/films.json`)
+      .then(response => { })
+      .catch(e => { });
   };
 
   getRandUserFilms = () => {
@@ -163,8 +163,8 @@ class RandomFilm extends Component {
             <button onClick={this.getRandomUserHandler}>RND</button>
           </div>
         ) : (
-          <Loader />
-        )}
+            <Loader />
+          )}
       </div>
     );
   }

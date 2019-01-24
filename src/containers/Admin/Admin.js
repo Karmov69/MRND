@@ -13,7 +13,7 @@ class Admin extends Component {
     this.setState({ pending: true });
 
     await axios
-      .get("https://react-quiz-4129b.firebaseio.com/films.json")
+      .get(`${process.env.REACT_APP_FIRWBASE_URL}/films.json`)
       .then(response => {
         let seanceList = [];
 
@@ -42,8 +42,8 @@ class Admin extends Component {
             <h1>Админка</h1>
           </div>
         ) : (
-          <Loader />
-        )}
+            <Loader />
+          )}
       </div>
     );
   }

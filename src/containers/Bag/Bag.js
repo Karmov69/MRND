@@ -16,7 +16,7 @@ class Bag extends Component {
       pending: true
     });
     await axios
-      .get("https://react-quiz-4129b.firebaseio.com/comments.json")
+      .get(`${process.env.REACT_APP_FIRWBASE_URL}/comments.json`)
       .then(response => {
         let comments = [];
 
@@ -58,7 +58,7 @@ class Bag extends Component {
     }
     date = mm + "/" + dd + "/" + yyyy;
 
-    await axios.post("https://react-quiz-4129b.firebaseio.com/comments.json", {
+    await axios.post(`${process.env.REACT_APP_FIRWBASE_URL}/comments.json`, {
       comment: this.state.comment,
       author: this.state.user,
       date
@@ -67,7 +67,7 @@ class Bag extends Component {
       comment: ""
     });
     await axios
-      .get("https://react-quiz-4129b.firebaseio.com/comments.json")
+      .get(`${process.env.REACT_APP_FIRWBASE_URL}/comments.json`)
       .then(response => {
         let comments = [];
 
@@ -122,8 +122,8 @@ class Bag extends Component {
             </button>
           </div>
         ) : (
-          <Loader />
-        )}
+            <Loader />
+          )}
       </div>
     );
   }

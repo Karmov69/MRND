@@ -40,7 +40,6 @@ class Auth extends Component {
       this.state.formControls.password.value,
       true
     );
-    localStorage.setItem("sadsa", "test");
   };
 
   registerHandler = () => {
@@ -140,7 +139,7 @@ class Auth extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  
+
   return {
     auth: (email, password, isLogin) => dispatch(auth(email, password, isLogin))
   };

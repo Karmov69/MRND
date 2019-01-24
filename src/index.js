@@ -12,10 +12,10 @@ import thunk from "redux-thunk";
 import * as firebase from "firebase";
 
 const config = {
-  apiKey: "AIzaSyC5kTG3pKKqKhyWP6PiVFsJXqjoXyesYJY",
-  authDomain: "react-quiz-4129b.firebaseapp.com",
-  databaseURL: "https://react-quiz-4129b.firebaseio.com",
-  storageBucket: "react-quiz-4129b.appspot.com"
+  apiKey: `${process.env.REACT_APP_API_KEY}`,
+  authDomain: `${process.env.REACT_APP_AUTH_DOMAIN}`,
+  databaseURL: `${process.env.REACT_APP_FIRWBASE_URL}`,
+  storageBucket: `${process.env.REACT_APP_STORAGE_BUCKET}`,
 };
 
 firebase.initializeApp(config);

@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://react-quiz-4129b.firebaseio.com/"
+  baseURL: `${process.env.REACT_APP_REGISTER_URL}`
 });

@@ -26,7 +26,7 @@ class AddFilm extends Component {
     this.setState({ pending: true });
     let currentUser = localStorage.getItem("login");
     await axios
-      .get("https://react-quiz-4129b.firebaseio.com/films.json")
+      .get(`${process.env.REACT_APP_FIRWBASE_URL}/films.json`)
       .then(response => {
         let seanceList = [];
 
@@ -51,7 +51,7 @@ class AddFilm extends Component {
     }
 
     await axios
-      .get("https://react-quiz-4129b.firebaseio.com/all-films.json")
+      .get(`${process.env.REACT_APP_FIRWBASE_URL}/all-films.json`)
       .then(response => {
         let myAddedList = [];
 
@@ -76,8 +76,9 @@ class AddFilm extends Component {
       .catch(e => {
         console.log(e);
       });
+
     await axios
-      .get("https://react-quiz-4129b.firebaseio.com/viewed.json")
+      .get(`${process.env.REACT_APP_FIRWBASE_URL}/viewed.json`)
       .then(response => {
         let data = response.data;
         let viewedList = [];
@@ -158,8 +159,8 @@ class AddFilm extends Component {
           {film.exist ? (
             <span style={{ color: "red" }}>{film.filmName} </span>
           ) : (
-            <span>{film.filmName} </span>
-          )}
+              <span>{film.filmName} </span>
+            )}
           <button
             type="button"
             onClick={this.deleteFilmHandler.bind(this, film.filmName)}
@@ -197,7 +198,7 @@ class AddFilm extends Component {
     let author = localStorage.getItem("login");
 
     await axios
-      .get("https://react-quiz-4129b.firebaseio.com/films.json")
+      .get(`${process.env.REACT_APP_FIRWBASE_URL}/films.json`)
       .then(response => {
         for (const i in response.data) {
           if (response.data.hasOwnProperty(i)) {
@@ -208,20 +209,16 @@ class AddFilm extends Component {
           }
         }
       })
-      .catch(e => {});
+      .catch(e => { });
 
     this.setState({
       exist: false
     });
     if (!this.state.authorExist) {
       await axios
-        .get("https://react-quiz-4129b.firebaseio.com/all-films.json")
+        .get(`${process.env.REACT_APP_FIRWBASE_URL}/all-films.json`)
         .then(response => {
           if (response.data) {
-            // console.log("viewedList", this.state.viewedList);
-            // console.log("myAddedList", this.state.myAddedList);
-            // console.log("films", this.state.films);
-
             for (const film of this.state.films) {
               let filmState = film.filmName;
               for (const filmViewed of this.state.viewedList) {
@@ -250,12 +247,12 @@ class AddFilm extends Component {
               }
             }
           } else {
-            axios.post("https://react-quiz-4129b.firebaseio.com/films.json", {
+            axios.post(`${process.env.REACT_APP_FIRWBASE_URL}/films.json`, {
               films: this.state.films,
               author: localStorage.getItem("login")
             });
             axios.post(
-              "https://react-quiz-4129b.firebaseio.com/all-films.json",
+              `${process.env.REACT_APP_FIRWBASE_URL}/all-films.json`,
               {
                 films: this.state.films,
                 author: localStorage.getItem("login")
@@ -269,18 +266,18 @@ class AddFilm extends Component {
             });
           }
         })
-        .catch(e => {});
+        .catch(e => { });
 
       await axios
-        .get("https://react-quiz-4129b.firebaseio.com/all-films.json")
+        .get(`${process.env.REACT_APP_FIRWBASE_URL}/all-films.json`)
         .then(response => {
           if (!this.state.exist && response.data && !this.state.existAllFilms) {
-            axios.post("https://react-quiz-4129b.firebaseio.com/films.json", {
+            axios.post(`${process.env.REACT_APP_FIRWBASE_URL}/films.json`, {
               films: this.state.films,
               author: localStorage.getItem("login")
             });
             axios.post(
-              "https://react-quiz-4129b.firebaseio.com/all-films.json",
+              `${process.env.REACT_APP_FIRWBASE_URL}/all-films.json`,
               {
                 films: this.state.films,
                 author: localStorage.getItem("login")
@@ -294,12 +291,12 @@ class AddFilm extends Component {
             });
           }
           if (!this.state.exist && response.data && this.state.existAllFilms) {
-            axios.post("https://react-quiz-4129b.firebaseio.com/films.json", {
+            axios.post(`${process.env.REACT_APP_FIRWBASE_URL}/films.json`, {
               films: this.state.films,
               author: localStorage.getItem("login")
             });
             axios.post(
-              "https://react-quiz-4129b.firebaseio.com/all-films.json",
+              `${process.env.REACT_APP_FIRWBASE_URL}/all-films.json`,
               {
                 films: this.state.films,
                 author: localStorage.getItem("login")
@@ -313,15 +310,13 @@ class AddFilm extends Component {
             });
           }
         })
-        .catch(e => {});
+        .catch(e => { });
     } else {
       console.log("Пользователь уже существует");
       this.setState({
         message: "Для текущего сеанса, вы уже добавляли фильм!"
       });
     }
-
-    // -----------
   };
 
   getMyAdded = () => {
@@ -331,7 +326,7 @@ class AddFilm extends Component {
         resultArr.push(iterator);
       }
 
-      resultArr = resultArr.filter(function(item) {
+      resultArr = resultArr.filter(function (item) {
         return resultArr.hasOwnProperty(item)
           ? false
           : (resultArr[item] = true);
@@ -421,8 +416,8 @@ class AddFilm extends Component {
                     {this.state.visibleViewedList ? (
                       <i className="fa fa-chevron-up" aria-hidden="true" />
                     ) : (
-                      <i className="fa fa-chevron-down" aria-hidden="true" />
-                    )}
+                        <i className="fa fa-chevron-down" aria-hidden="true" />
+                      )}
                   </div>
                   {this.state.visibleViewedList ? (
                     <ul className={classes.viewed}>{this.getMyAdded()}</ul>
@@ -440,8 +435,8 @@ class AddFilm extends Component {
                 {this.state.visibleThisSeance ? (
                   <i className="fa fa-chevron-up" aria-hidden="true" />
                 ) : (
-                  <i className="fa fa-chevron-down" aria-hidden="true" />
-                )}
+                    <i className="fa fa-chevron-down" aria-hidden="true" />
+                  )}
               </div>
               {this.state.visibleThisSeance ? (
                 <ul className={classes.viewed}>{this.getThisSeance()}</ul>
@@ -449,8 +444,8 @@ class AddFilm extends Component {
             </form>
           </div>
         ) : (
-          <Loader />
-        )}
+            <Loader />
+          )}
       </div>
     );
   }

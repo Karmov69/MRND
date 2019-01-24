@@ -16,7 +16,7 @@ class Viewed extends Component {
     });
 
     await axios
-      .get("https://react-quiz-4129b.firebaseio.com/viewed.json")
+      .get(`${process.env.REACT_APP_FIRWBASE_URL}/viewed.json`)
       .then(response => {
         let films = [];
         for (const i in response.data) {
@@ -114,8 +114,8 @@ class Viewed extends Component {
             <ul>{this.getViewed()}</ul>
           </div>
         ) : (
-          <Loader />
-        )}
+            <Loader />
+          )}
       </div>
     );
   }
