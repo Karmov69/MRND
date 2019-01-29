@@ -11,8 +11,13 @@ install:
 - yarn install
 script:
 - yarn build 
+cache:
+  directories:
+    - node_modules
 deploy:
   skip_cleanup: true
   provider: firebase
   token:
     secure: "1/lgcyv6lARwWTWfA2Gx0X65uUJbiuQK4VnRM-s00ARPwvopeKrP0__6RN22vgG4O1"
+  on:
+    branch: master

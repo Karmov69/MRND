@@ -10,4 +10,4 @@
 4. Установить NPM зависимости `yarn`
 5. Билд `yarn run build`
 
-### Artur69Karmov@gmail.com
+#### Artur69Karmov@gmail.com
