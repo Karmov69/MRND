@@ -34,7 +34,7 @@ export default function quizReducer(state = initialState, action) {
       return {
         ...state,
         answerState: action.answerState,
-        results: "action.results"
+        results: action.results
       };
     case FINISH_QUIZ:
       return { ...state, isFinished: true };

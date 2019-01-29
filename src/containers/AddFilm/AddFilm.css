@@ -89,6 +89,7 @@ button {
 .viewedTitle h2 {
   margin-right: 20px;
 }
+
 .viewedTitle i {
   height: 10px;
   font-size: 20px;
@@ -104,9 +105,11 @@ button {
   cursor: pointer;
   justify-content: space-between;
 }
+
 .thisSeance h2 {
   margin-right: 20px;
 }
+
 .thisSeance i {
   height: 10px;
   font-size: 20px;
