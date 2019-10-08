@@ -74,8 +74,8 @@ class RandomFilm extends Component {
   getUsers = () => {
     if (this.state.users.length !== 0) {
       let resultArr = [];
-      for (const iterator of this.state.users) {
-        resultArr.push(iterator.login);
+      for (const user of this.state.users) {
+        resultArr.push(user.login);
       }
 
       return resultArr.map((user, index) => {
@@ -88,15 +88,15 @@ class RandomFilm extends Component {
     let max = this.state.users.length;
     let number = Math.floor(Math.random() * max);
     let randUser = this.state.users[number].login;
-    console.log(randUser);
 
     this.setState({ randUser });
     let resultArr = [];
     resultArr.push(randUser);
+
     for (const key in this.state.films) {
       if (this.state.films.hasOwnProperty(key)) {
         const element = this.state.films[key];
-        if (randUser === element.author) {
+        if (randUser.toLowerCase() === element.author.toLowerCase()) {
           for (const iterator of element.films) {
             resultArr.push(iterator.filmName);
           }
@@ -120,6 +120,7 @@ class RandomFilm extends Component {
 
   getRandUserFilms = () => {
     if (this.state.selectedUser.length !== 0) {
+
       let resultArr = [];
       for (const iterator of this.state.selectedUser) {
         resultArr.push(iterator);
@@ -127,12 +128,12 @@ class RandomFilm extends Component {
 
       return resultArr.map((film, index) => {
         if (index === 0) {
-          return <li key={index}>{film}</li>;
+          return <li key={index} className={classes.randUser}>{film}</li>;
         } else {
           return (
-            <li key={index}>
-              {film}{" "}
-              <button onClick={this.addViewed.bind(this, film)}>Выбрать</button>
+            <li key={index} className={classes.userData}>
+              <div className={classes.filmName}>{film}{" "}</div>
+              <button onClick={this.addViewed.bind(this, film)} className={classes.filmBtn}>Выбрать</button>
             </li>
           );
         }
@@ -147,20 +148,25 @@ class RandomFilm extends Component {
           <div>
             {this.state.randUser ? (
               <div>
-                <h2>Пользователь</h2>
                 <ul>{this.getRandUserFilms()}</ul>
               </div>
             ) : null}
 
-            {this.state.films.length !== 0 ? (
+            {this.state.films.length !== 0 && !this.state.randUser ? (
               <div>
                 <h2>Список фильмов</h2>
                 <ul>{this.getFIlms()}</ul>
               </div>
             ) : null}
-            <h2>Пользователи</h2>
-            <ul>{this.getUsers()}</ul>
-            <button onClick={this.getRandomUserHandler}>RND</button>
+
+            {!this.state.randUser ? (
+              <div>
+                <h2>Пользователи</h2>
+                <ul>{this.getUsers()}</ul>
+              </div>
+            ) : null}
+
+            <button onClick={this.getRandomUserHandler} className={classes.btnRnd}>RND</button>
           </div>
         ) : (
             <Loader />
