@@ -7,16 +7,31 @@ class Rating extends Component {
   }
 
   getStars = () => {
+
     let starsCount = [];
     for (let i = 1; i <= this.props.count; i++) {
-      starsCount.push(
-        <i
-          className="far fa-star"
-          style={{ cursor: "pointer" }}
-          key={i}
-          onClick={this.doRating.bind(this, i)}
-        />
-      );
+      console.log('this.props.avg', this.props.avg);
+      if (~~this.props.avg === i) {
+        starsCount.push(
+          <i
+            className="fas fa-star-half-alt"
+            aria-hidden="true"
+            style={{ cursor: "pointer" }}
+            key={i}
+            onClick={this.doRating.bind(this, i)}
+          />
+        );
+      } else {
+        starsCount.push(
+          <i
+            className="far fa-star"
+            style={{ cursor: "pointer" }}
+            key={i}
+            onClick={this.doRating.bind(this, i)}
+          />
+        );
+      }
+
     }
     return starsCount;
   };

@@ -87,21 +87,26 @@ class Viewed extends Component {
     if (this.state.films.length !== 0) {
       let resultArr = [];
       for (const iterator of this.state.films) {
-        resultArr.push(iterator.film);
+        resultArr.push({ film: iterator.film, avg: iterator.avg });
       }
+      console.log(this.state.films);
+      console.log(resultArr);
 
-      return resultArr.map((film, index) => {
+      for (const iterator of resultArr) {
         return (
-          <li key={index}>
-            {film}
+          <li key={iterator}>
+            {iterator.film}
             <Rating
-              film={film}
+              film={iterator.film}
               count="5"
-              doRating={this.doRating.bind(this, film)}
+              avg={iterator.avg}
+              doRating={this.doRating.bind(this, iterator.film)}
             />
           </li>
-        );
-      });
+        )
+      }
+
+
     }
   };
 
