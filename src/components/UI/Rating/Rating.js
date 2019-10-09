@@ -10,7 +10,6 @@ class Rating extends Component {
 
     let starsCount = [];
     for (let i = 1; i <= this.props.count; i++) {
-      console.log('this.props.avg', this.props.avg);
       if (~~this.props.avg === i) {
         starsCount.push(
           <i
